@@ -13,11 +13,11 @@ Complete the following tasks:
 
 2. Why are all the errors on line 2? Find the bug and fix.
 
-3. Update the validation strings on the "Subsystem" and "PLU" fields so that an error is registerd when an '&' symbol is present.
+3. Update the validation strings on the "Subsystem" and "PLU" fields so that an error is registered when an '&' symbol is present.
 
 ** Feel free to refactor existing code to simplify, make it more readable or to fit in with your solution **
 
 Bonus Task:
-Add some HTML and CSS to the response object so that the errors list is more human readable.
+Add some HTML and CSS to the response object so that the errors list is more human-readable.
 
 To submit your solution, either send me a link to a new gitub repo, or you can simply zip up the source code and email to taison.eady@rjeglobal.com

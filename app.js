@@ -18,7 +18,7 @@ const server = http.createServer((req, res) => {
 
         await vd.validateEquipment(jsonArray, vdm.equipmentMap, errors);
 
-        res.end(JSON.stringify(errors))
+        res.end(JSON.stringify(errors));
         console.log("Endpoint reached.");
     } 
   )

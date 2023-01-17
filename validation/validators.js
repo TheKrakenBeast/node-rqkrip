@@ -1,4 +1,5 @@
 let lineError = require('../models/LineError');
+let colError = require('../models/ColumnError');
 
 // ------------------ Main Validators -------------------- //
 
@@ -11,22 +12,23 @@ async function validateEquipment(equipmentList, fieldMap, errors) {
 // ------------------ Sub Validators -------------------- //
 
 //Checks equipment list for required fields and registers an error if a required field is missing.
-
 function validateColumns(equipmentList, fieldMap, errors) {
-
     let headers = Object.keys(equipmentList[0]);
 
     for (let col = 0; col < headers.length; col++) {
         let field = fieldMap.get(headers[col]);
         if (field) {
             field.colIndex = col;
+        } else {
+            // Register a new error if an unknown field is present
+            errors.push(new colError('Unknown field', 'Unknown', col));
         }
     }
 
     // Check that All the required labels now exist in map
     for (const item of fieldMap[Symbol.iterator]()) {
-        if (item[1].isRequired && item[1].colIndex == null) {
-            errors.push(new lineError('Required Column Missing', item[0], 'N/A'));
+        if (item[1].isRequired && item[1].colIndex === null) {
+            errors.push(new colError('Required Column Missing', item[0], 'N/A'));
         }
     }
 }
@@ -98,10 +100,6 @@ function validateData(equipmentList, fieldMap, errors) {
 }
 
 function validateUniqueKeys(equipmentList, fieldMap, errors) {
-    // These are not required at this point
-    let uniqueKey = 1;
-    let cols = getKeyColumns(fieldMap).get(uniqueKey);
-
     let keyStrings = [];
 
     // Row starts at 1 to produce human-readable line numbers
@@ -135,25 +133,6 @@ function validateUniqueKeys(equipmentList, fieldMap, errors) {
             )
         );
     }
-}
-
-function getKeyColumns(fieldMap) {
-    let uniqueKeys = new Map();
-
-    for (const item of fieldMap[Symbol.iterator]()) {
-        let keyID = item[1].uniqueKeyID;
-
-        if (!keyID) {
-            continue;
-        }
-
-        if (uniqueKeys.has(keyID)) {
-            uniqueKeys.get(keyID).push(item[1].colIndex);
-        } else {
-            uniqueKeys.set(keyID, [item[1].colIndex]);
-        }
-    }
-    return uniqueKeys;
 }
 
 module.exports = {
