@@ -18,7 +18,9 @@ const server = http.createServer((req, res) => {
 
         await vd.validateEquipment(jsonArray, vdm.equipmentMap, errors);
 
-        res.end(JSON.stringify(errors));
+        // node has no concept of the DOM, so rather than installing express etc. I went for the simplest formatting option.
+        res.end(JSON.stringify(errors, null, 3));
+
         console.log("Endpoint reached.");
     } 
   )
